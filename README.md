@@ -24,12 +24,12 @@ Run this script once for every condition:
 
 ### Dependencies
 
-python=3.10.19
-numpy=1.26.4
-scipy=1.15.2
-pandas=2.3.3
-matplotlib=3.10.8
-plotnine=0.12.3
+python=3.10.19  
+numpy=1.26.4  
+scipy=1.15.2  
+pandas=2.3.3  
+matplotlib=3.10.8  
+plotnine=0.12.3  
 patchworklib=0.6.3
 
 
