@@ -11,7 +11,7 @@ Silva, González, & Laje (2026)
 
 """
 
-#%%
+#%% Import libraries
 
 import pandas as pd
 import numpy as np
@@ -28,15 +28,6 @@ from matplotlib.colors import rgb2hex
 from matplotlib.ticker import MaxNLocator
 
 datafolder = '../data/'
-
-
-#%%
-
-
-
-
-
-
 
 
 
@@ -120,16 +111,6 @@ def integrate(model, y_ini, params, hyper_params):
 	return [t, asyn, y]
 
 
-#%%
-
-
-
-
-
-
-
-
-
 
 #%% Load data
 params_SCpure_df = pd.read_csv(datafolder + 'params_SCpure_df.csv', index_col=0).reset_index(drop=True)
@@ -175,16 +156,6 @@ params_PScomb_df = params_PScomb_df.drop(['divergent'], axis=1)
 params_PSSCcomb_df = params_PSSCcomb_df[(params_PSSCcomb_df['divergent']==False)].reset_index(drop=True)
 params_PSSCcomb_df = params_PSSCcomb_df.drop(['divergent'], axis=1)
 #params_PSSCcomb_df.to_csv('params_PSSCcomb_df.csv')
-
-
-#%%
-
-
-
-
-
-
-
 
 
 
@@ -359,16 +330,6 @@ params_PSSCpure3_df = params_PSSCpure3_df.drop(['outlier'], axis=1)
 #params_PSSCpure3_df.to_csv('params_PSSCpure3_df.csv')
 
 
-#%%
-
-
-
-
-
-
-
-
-
 
 #%% Histogram dist PSSCcomb and PSSCpure together
 violet_dark = rgb2hex(cm.get_cmap('plasma')(0.0))
@@ -430,8 +391,8 @@ for spine in ax.spines.values():
 ax.set_xlabel("Fitting loss function (ms)")
 
 plt.tight_layout()
-plt.savefig("Fig_Distance.pdf")
-plt.savefig("Fig_Distance.png", dpi=300, bbox_inches="tight")
+plt.savefig("Fig6_Distance.pdf")
+plt.savefig("Fig6_Distance.png", dpi=300, bbox_inches="tight")
 plt.show()
 
 summary = params_PSSCpurecomb_df.groupby('perturb_type_x_context')[['dist']].agg(['median', 'min', 'max'])
@@ -439,14 +400,6 @@ summary.columns = ['_'.join(col) for col in summary.columns]
 summary = summary.reset_index()
 print(summary)
 #summary.to_csv('summary_PSSCpurecomb_df.csv')
-
-
-#%%
-
-
-
-
-
 
 
 
@@ -1125,18 +1078,9 @@ model_PSSCpure_1_df = model_data_df.reset_index(drop=True)
 #model_PSSCpure_1_df.to_csv('model_PSSCpure_1_df.csv')
 
 
-#%%
 
+#%% Plot model time series: pure context
 
-
-
-
-
-
-
-
-
-#%% Plot model time series
 color_map = ["blue","magenta","blue","magenta"]
 shape_map = ["s","D"]
 line_map = ["solid","dashed"]
@@ -1196,17 +1140,19 @@ plot_model_timeseries = (
 	+ scale_shape_manual(values = shape_map)
 	+ scale_linetype_manual(values = line_map)
 	+ scale_x_continuous(breaks=range(x_lims[0]+1,x_lims[1],1))
-	+ scale_y_continuous(limits=y_lims,breaks=range(y_lims[0],y_lims[1],10))
-	+ theme_bw(base_size=22)
+	+ scale_y_continuous(limits=y_lims,breaks=range(y_lims[0],y_lims[1],20))
+	+ theme_bw(base_size=18)
 	+ theme(legend_title = element_text(size=18),
                      legend_text=element_text(size=18),
                      legend_key=element_rect(fill = "white", color = 'white'), 
-                     figure_size = (12, 6))
+                     # figure_size = (12, 6))
+                     figure_size = (8, 4))
 	+ themes.theme(
                 axis_title_y = themes.element_text(angle = 90, va = 'center', size = 22),
-                axis_title_x = themes.element_text(va = 'center', size = 22))
+                axis_title_x = themes.element_text(va = 'center', size = 22),
+	            axis_text = themes.element_text(size = 22))
 	+ theme(strip_background = element_blank())
-	+ ggtitle("(b) SCpure")
+	+ ggtitle("(b) SCpure (experiment and model)")
 	+ xlab("n")
     + ylab("Asynchrony $e_n$ (ms)")
 	)
@@ -1256,17 +1202,19 @@ plot_model_timeseries = (
 	+ scale_shape_manual(values = shape_map)
 	+ scale_linetype_manual(values = line_map)
 	+ scale_x_continuous(breaks=range(x_lims[0]+1,x_lims[1],1))
-	+ scale_y_continuous(limits=y_lims,breaks=range(y_lims[0],y_lims[1],10))
-	+ theme_bw(base_size=22)
+	+ scale_y_continuous(limits=y_lims,breaks=range(y_lims[0],y_lims[1],20))
+	+ theme_bw(base_size=18)
 	+ theme(legend_title = element_text(size=18),
                      legend_text=element_text(size=18),
                      legend_key=element_rect(fill = "white", color = 'white'), 
-                     figure_size = (12, 6))
+                     # figure_size = (12, 6))
+                     figure_size = (8, 4))
 	+ themes.theme(
                 axis_title_y = themes.element_text(angle = 90, va = 'center', size = 22),
-                axis_title_x = themes.element_text(va = 'center', size = 22))
+                axis_title_x = themes.element_text(va = 'center', size = 22),
+	            axis_text = themes.element_text(size = 22))
 	+ theme(strip_background = element_blank())
-	+ ggtitle("(a) PSpure")
+	+ ggtitle("(a) PSpure (experiment and model)")
 	+ xlab("n")
     + ylab("Asynchrony $e_n$ (ms)")
 	)
@@ -1275,7 +1223,7 @@ plot_model_timeseries_PSpure_0 = pw.load_ggplot(plot_model_timeseries)
 #plot_model_timeseries.save('Adjustment_PSpure_0.pdf')
 
 
-#%% Plot phase-space diagram for model adjusted only to 50 and 20 ms
+#%% Plot phase-space diagram for model adjusted only to 50 and 20 ms: pure context
 
 # Without baseline
 model_SCpure_0_df = model_SCpure_0_df.astype({'n':int})
@@ -1288,7 +1236,7 @@ model_SCpure_0_PhaseS2_df = model_SCpure_0_PhaseS2_df.assign(perturb_sign = np.s
 model_SCpure_0_PhaseS2_df["perturb_size"] = abs(model_SCpure_0_PhaseS2_df["perturb_size"])
 model_SCpure_0_PhaseS2_df["perturb_type"] = 'SC'
 model_SCpure_0_PhaseS2_df['x-Tpost'] = model_SCpure_0_PhaseS2_df['x'] - model_SCpure_0_PhaseS2_df['s']
-#model_SCpure_0_PhaseS2_df.to_csv('model_SCpure_0_PhaseS2_df.csv')
+# model_SCpure_0_PhaseS2_df.to_csv('model_SCpure_0_PhaseS2_df.csv')
 
 model_PSpure_0_df = model_PSpure_0_df.astype({'n':int})
 model_PSpure_0_df = model_PSpure_0_df.astype({'x':float})
@@ -1300,7 +1248,7 @@ model_PSpure_0_PhaseS2_df = model_PSpure_0_PhaseS2_df.assign(perturb_sign = np.s
 model_PSpure_0_PhaseS2_df["perturb_size"] = abs(model_PSpure_0_PhaseS2_df["perturb_size"])
 model_PSpure_0_PhaseS2_df["perturb_type"] = 'PS'
 model_PSpure_0_PhaseS2_df['x-Tpost'] = model_PSpure_0_PhaseS2_df['x'] - model_PSpure_0_PhaseS2_df['s']
-#model_PSpure_0_PhaseS2_df.to_csv('model_PSpure_0_PhaseS2_df.csv')
+# model_PSpure_0_PhaseS2_df.to_csv('model_PSpure_0_PhaseS2_df.csv')
 
 model_PSSCpure_0_PhaseS2_df = pd.concat([model_PSpure_0_PhaseS2_df, model_SCpure_0_PhaseS2_df], axis=0).reset_index(drop=True)
 model_PSSCpure_0_PhaseS2_df = model_PSSCpure_0_PhaseS2_df.astype({'perturb_size':str})
@@ -1319,17 +1267,19 @@ plot_phase_ps = (
 	+ scale_color_manual(values = color_map_hex)
 	+ scale_shape_manual(values = shape_map)
 	+ scale_linetype_manual(values = line_map)
-    + geom_point(model_PSSCpure_0_PhaseS2_df, aes(x='p', y='x-Tpost'), size = 4)     
-    + theme_bw(base_size=22)
+    + geom_point(model_PSSCpure_0_PhaseS2_df, aes(x='p', y='x-Tpost'), size = 2)
+    + theme_bw(base_size=18)
 	+ theme(legend_title = element_text(size=18),
 	                    legend_text=element_text(size=18),
 	                    legend_key=element_rect(fill = "white", color = 'white'), 
-	                    figure_size = (6, 6))
+	                    # figure_size = (6, 6))
+	                    figure_size = (4, 4))
 	+ themes.theme(
 	               axis_title_y = themes.element_text(angle = 90, va = 'center', size = 22),
-	               axis_title_x = themes.element_text(va = 'center', size = 22))
+	               axis_title_x = themes.element_text(va = 'center', size = 22),
+	               axis_text = themes.element_text(size = 22))
 	+ theme(strip_background = element_blank())
-	+ ggtitle("(c) PSpure vs SCpure")
+	+ ggtitle("(c) PSpure vs SCpure (model)")
 	+ xlab("Predicted asynchrony $p_n$ (ms)")
     + ylab("$x_n - T_{post}$ (ms)")
 	)
@@ -1338,24 +1288,403 @@ plot_phase_PSSCpure_3 = pw.load_ggplot(plot_phase_ps)
 #plot_phase_ps.save("model_PSSCpure_3_Phase-Space.pdf")
 
 
-#%%
 plot_model = (plot_model_timeseries_PSpure_0/plot_model_timeseries_SCpure_0)|plot_phase_PSSCpure_3
-plot_model.savefig('Fig_Fit.pdf')
-plot_model.savefig('Fig_Fit.png')
-
-
-#%%
+plot_model.savefig('Fig2_Fit_pure.pdf')
+plot_model.savefig('Fig2_Fit_pure.png')
 
 
 
+#%% Theorical data timeseries: asyn (Pure separete fitting)
+
+# Without baseline
+model_SCpure_0_df = model_SCpure_0_df.astype({'n':int})
+model_SCpure_0_df = model_SCpure_0_df.astype({'x':float})
+model_SCpure_0_df = model_SCpure_0_df.astype({'s':float})
+model_SCpure_0_df = model_SCpure_0_df.astype({'asyn':float})
+model_SCpure_0_df = model_SCpure_0_df.astype({'perturb_size':int})
+model_SCpure_0_20_50_df = model_SCpure_0_df[(model_SCpure_0_df["baseline"]==0) & ((model_SCpure_0_df["perturb_size"]==50) | (model_SCpure_0_df["perturb_size"]==-50) | (model_SCpure_0_df["perturb_size"]==20) | (model_SCpure_0_df["perturb_size"]==-20))] 
+model_SCpure_0_20_50_df = model_SCpure_0_20_50_df.assign(perturb_sign = np.select([model_SCpure_0_20_50_df["perturb_size"]==50, model_SCpure_0_20_50_df["perturb_size"]==-50, model_SCpure_0_20_50_df["perturb_size"]==20, model_SCpure_0_20_50_df["perturb_size"]==-20],['pos','neg','pos','neg'])) 
+model_SCpure_0_20_50_df["perturb_size"] = abs(model_SCpure_0_20_50_df["perturb_size"])
+model_SCpure_0_20_50_df["perturb_type"] = 'SC'
+model_SCpure_0_20_50_df['perturb_size'] = model_SCpure_0_20_50_df['perturb_size'].astype('str') 
+#model_SCpure_0_20_50_df.to_csv('model_SCpure_0_20_50_df.csv')
+
+model_PSpure_0_df = model_PSpure_0_df.astype({'n':int})
+model_PSpure_0_df = model_PSpure_0_df.astype({'x':float})
+model_PSpure_0_df = model_PSpure_0_df.astype({'s':float})
+model_PSpure_0_df = model_PSpure_0_df.astype({'asyn':float})
+model_PSpure_0_df = model_PSpure_0_df.astype({'perturb_size':int})
+model_PSpure_0_20_50_df = model_PSpure_0_df[(model_PSpure_0_df["baseline"]==0) & ((model_PSpure_0_df["perturb_size"]==50) | (model_PSpure_0_df["perturb_size"]==-50) | (model_PSpure_0_df["perturb_size"]==20) | (model_PSpure_0_df["perturb_size"]==-20))] 
+model_PSpure_0_20_50_df = model_PSpure_0_20_50_df.assign(perturb_sign = np.select([model_PSpure_0_20_50_df["perturb_size"]==50, model_PSpure_0_20_50_df["perturb_size"]==-50, model_PSpure_0_20_50_df["perturb_size"]==20, model_PSpure_0_20_50_df["perturb_size"]==-20],['pos','neg','pos','neg'])) 
+model_PSpure_0_20_50_df["perturb_size"] = abs(model_PSpure_0_20_50_df["perturb_size"])
+model_PSpure_0_20_50_df["perturb_type"] = 'PS'
+model_PSpure_0_20_50_df['perturb_size'] = model_PSpure_0_20_50_df['perturb_size'].astype('str') 
+#model_PSpure_0_20_50_df.to_csv('model_PSpure_0_20_50_df.csv')
+
+model_SCpure_PSpure_0_20_50_df = pd.concat([model_SCpure_0_20_50_df, model_PSpure_0_20_50_df], axis=0).reset_index(drop=True)
+model_SCpure_PSpure_0_20_50_df = model_SCpure_PSpure_0_20_50_df[(model_SCpure_PSpure_0_20_50_df['n'] >= -3) & (model_SCpure_PSpure_0_20_50_df['n'] < 11)].reset_index(drop=True)
+model_SCpure_PSpure_0_20_50_df['perturb_type_x_perturb_sign_x_perturb_size'] = model_SCpure_PSpure_0_20_50_df[['perturb_type','perturb_sign','perturb_size']].agg(''.join, axis=1)
+#model_SCpure_PSpure_0_20_50_df.to_csv('model_SCpure_PSpure_0_20_50_df.csv')
+
+x_lims = [-4,11]
+y_lims = [-80, 80]
+fig_xsize = 15 * 0.393701   # centimeter to inch
+fig_ysize = 10 * 0.393701   # centimeter to inch
+
+plot_model_timeseries = (
+	ggplot(model_SCpure_PSpure_0_20_50_df, aes(x = 'n', y = 'asyn',
+                                            group = 'perturb_type_x_perturb_sign_x_perturb_size',
+                                            color = 'perturb_type',
+                                            linetype = 'perturb_sign',
+                                            shape = 'perturb_size'))
+    	+ geom_line()
+	+ geom_point(size = marker_size)
+	+ scale_color_manual(values = color_map_hex, guide=False)
+	+ scale_linetype_manual(values = line_map, guide=False)
+	+ scale_shape_manual(values = shape_map, guide=False)
+#	+ scale_color_manual(values = color_map_hex)
+#	+ scale_linetype_manual(values = line_map)
+#	+ scale_shape_manual(values = shape_map)
+	+ scale_x_continuous(breaks=range(x_lims[0]+1,x_lims[1],1))
+	# + scale_y_continuous(breaks=range(y_lims[0],y_lims[1],10))
+	+ scale_y_continuous(breaks=range(y_lims[0],y_lims[1],20))
+	+ theme_bw(base_size=14)
+	+ theme(legend_title = element_text(size=16),
+                     legend_text=element_text(size=16),
+                     legend_key=element_rect(fill = "white", color = 'white'), 
+                     figure_size = (fig_xsize, fig_ysize))
+	+ themes.theme(
+                axis_title_y = themes.element_text(angle = 90, va = 'center', size = 14),
+                axis_title_x = themes.element_text(va = 'center', size = 14))
+	+ theme(strip_background = element_blank())
+ 		 	# title = element_text(size = 18))
+	+ xlab("n")
+	+ ylab("Asynchrony $e_n$ (ms)")
+	+ ggtitle("(a) Pure context (model)")
+	)
+#print(plot_model_timeseries)
+plot_model_timeseries_1 = pw.load_ggplot(plot_model_timeseries)
+#plot_model_timeseries.save('Fitting_data_pure.pdf')
+
+
+#%% Theorical data timeseries: asyn (Combined join fitting)
+
+# Without baseline
+model_PSSCcomb_0_df = model_PSSCcomb_0_df.astype({'n':int})
+model_PSSCcomb_0_df = model_PSSCcomb_0_df.astype({'baseline':int})
+model_PSSCcomb_0_df = model_PSSCcomb_0_df.astype({'x':float})
+model_PSSCcomb_0_df = model_PSSCcomb_0_df.astype({'s':float})
+model_PSSCcomb_0_df = model_PSSCcomb_0_df.astype({'asyn':float})
+model_PSSCcomb_0_df = model_PSSCcomb_0_df.astype({'perturb_size':int})
+model_PSSCcomb_0_20_50_df = model_PSSCcomb_0_df[(model_PSSCcomb_0_df["baseline"]==0) & ((model_PSSCcomb_0_df["perturb_size"]==50) | (model_PSSCcomb_0_df["perturb_size"]==-50) | (model_PSSCcomb_0_df["perturb_size"]==20) | (model_PSSCcomb_0_df["perturb_size"]==-20))] 
+model_PSSCcomb_0_20_50_df = model_PSSCcomb_0_20_50_df.assign(perturb_sign = np.select([model_PSSCcomb_0_20_50_df["perturb_size"]==50, model_PSSCcomb_0_20_50_df["perturb_size"]==-50, model_PSSCcomb_0_20_50_df["perturb_size"]==20, model_PSSCcomb_0_20_50_df["perturb_size"]==-20],['pos','neg','pos','neg'])) 
+model_PSSCcomb_0_20_50_df["perturb_size"] = abs(model_PSSCcomb_0_20_50_df["perturb_size"])
+model_PSSCcomb_0_20_50_df['perturb_size'] = model_PSSCcomb_0_20_50_df['perturb_size'].astype('str') 
+model_PSSCcomb_0_20_50_df = model_PSSCcomb_0_20_50_df[(model_PSSCcomb_0_20_50_df['n'] >= -3) & (model_PSSCcomb_0_20_50_df['n'] < 11)].reset_index(drop=True)
+model_PSSCcomb_0_20_50_df['perturb_type_x_perturb_sign_x_perturb_size'] = model_SCpure_PSpure_0_20_50_df[['perturb_type','perturb_sign','perturb_size']].agg(''.join, axis=1)
+# model_PSSCcomb_0_20_50_df.to_csv('model_PSSCcomb_0_20_50_df.csv')
+
+x_lims = [-4,11]
+y_lims = [-80, 80]
+fig_xsize = 15 * 0.393701   # centimeter to inch
+fig_ysize = 10 * 0.393701   # centimeter to inch
+
+plot_model_timeseries = (
+	ggplot(model_PSSCcomb_0_20_50_df, aes(x = 'n', y = 'asyn',
+                                            group = 'perturb_type_x_perturb_sign_x_perturb_size',
+                                            color = 'perturb_type',
+                                            linetype = 'perturb_sign',
+                                            shape = 'perturb_size'))
+    	+ geom_line()
+	+ geom_point(size = marker_size)
+	+ scale_color_manual(values = color_map_hex, guide=False)
+	+ scale_linetype_manual(values = line_map, guide=False)
+	+ scale_shape_manual(values = shape_map, guide=False)
+#	+ scale_color_manual(values = color_map_hex)
+#	+ scale_linetype_manual(values = line_map)
+#	+ scale_shape_manual(values = shape_map)
+	+ scale_x_continuous(breaks=range(x_lims[0]+1,x_lims[1],1))
+	# + scale_y_continuous(breaks=range(y_lims[0],y_lims[1],10))
+	+ scale_y_continuous(breaks=range(y_lims[0],y_lims[1],20))
+	+ theme_bw(base_size=14)
+	+ theme(legend_title = element_text(size=16),
+                     legend_text=element_text(size=16),
+                     legend_key=element_rect(fill = "white", color = 'white'), 
+                     figure_size = (fig_xsize, fig_ysize))
+	+ themes.theme(
+                axis_title_y = themes.element_text(angle = 90, va = 'center', size = 14),
+                axis_title_x = themes.element_text(va = 'center', size = 14))
+	+ theme(strip_background = element_blank())
+ 		 	# title = element_text(size = 18))
+	+ xlab("n")
+	+ ylab("Asynchrony $e_n$ (ms)")
+	+ ggtitle("(a) Combined context (model)")
+	)
+#print(plot_model_timeseries)
+plot_model_timeseries_2 = pw.load_ggplot(plot_model_timeseries)
+#plot_model_timeseries.save('Fitting_data_combined_join_fitting.pdf')
+
+
+
+#%% Embedding theorical data (Pure separete fitting)
+
+model_SCpure_PSpure_0_20_50_df = model_SCpure_PSpure_0_20_50_df.astype({
+    'n': int,
+    'baseline': int,
+    'x': float,
+    's': float,
+    'asyn': float,
+    'p': float
+})
+
+baseline_post = (
+    model_SCpure_PSpure_0_20_50_df
+    .loc[model_SCpure_PSpure_0_20_50_df['n'] >= 7]
+    .groupby(['perturb_type', 'perturb_sign', 'perturb_size'])['asyn']
+    .mean()
+    .rename('baseline_post')
+    .reset_index()
+)
+
+# Agregar baseline_post al dataframe original
+model_SCpure_PSpure_0_20_50_emb_df = (
+    model_SCpure_PSpure_0_20_50_df
+    .merge(
+        baseline_post,
+        on=['perturb_type', 'perturb_sign', 'perturb_size'],
+        how='left'
+    )
+)
+
+embed_start = 1
+embed_end = 8
+
+model_SCpure_PSpure_0_20_50_emb_df['asyn_pred_post'] = model_SCpure_PSpure_0_20_50_emb_df['p'] - model_SCpure_PSpure_0_20_50_emb_df['baseline_post']
+model_SCpure_PSpure_0_20_50_emb_df['asyn_pred_post_diff'] = (model_SCpure_PSpure_0_20_50_emb_df.groupby(['perturb_type', 'perturb_sign', 'perturb_size'])['asyn_pred_post'].diff())
+model_SCpure_PSpure_0_20_50_emb_df['x-Tpost'] = model_SCpure_PSpure_0_20_50_emb_df['x'] - model_SCpure_PSpure_0_20_50_emb_df['s']
+
+model_SCpure_PSpure_0_20_50_emb_df = (
+    model_SCpure_PSpure_0_20_50_emb_df[
+        ((model_SCpure_PSpure_0_20_50_emb_df['perturb_type'] == 'SC') & 
+         (model_SCpure_PSpure_0_20_50_emb_df['n'] >= embed_start)) |
+        ((model_SCpure_PSpure_0_20_50_emb_df['perturb_type'] == 'PS') & 
+         (model_SCpure_PSpure_0_20_50_emb_df['n'] > embed_start))
+    ].reset_index(drop=True)
+)
+model_SCpure_PSpure_0_20_50_df['perturb_size'] = model_SCpure_PSpure_0_20_50_df['perturb_size'].astype('str') 
+#model_SCpure_PSpure_0_20_50_emb_df.to_csv('model_SCpure_PSpure_0_20_50_emb_df.csv')
+
+x_lims = [-60,60]
+y_lims = [-60,60]
+fig_xsize = 10 * 0.393701   # centimeter to inch
+fig_ysize = 10 * 0.393701   # centimeter to inch
+
+plot_embed_p_diff_facet = (
+#	ggplot(model_SCpure_PSpure_0_20_50_emb_df, aes(x = 'asyn_pred_post', y = 'asyn_pred_post_diff',
+	ggplot(model_SCpure_PSpure_0_20_50_emb_df, aes(x = 'p', y = 'x-Tpost',										
+                                                group = 'perturb_type_x_perturb_sign_x_perturb_size',
+                                                color = 'perturb_type',
+                                                linetype = 'perturb_sign',
+                                                shape = 'perturb_size'))
+ 		 + geom_path()
+		 + geom_point(size = marker_size)
+		 + scale_color_manual(values = color_map_hex)
+		 + scale_linetype_manual(values = line_map)
+		 + scale_shape_manual(values = shape_map)
+		 + scale_x_continuous(breaks=range(x_lims[0],x_lims[1],20))
+		 + scale_y_continuous(breaks=range(y_lims[0],y_lims[1],20))
+		 + theme_bw(base_size=16)
+ 		 + theme(legend_title = element_text(size=12),
+	                     legend_text=element_text(size=12),
+	                     legend_key=element_rect(fill = "white", color = 'white'), 
+	                     figure_size = (fig_xsize, fig_ysize))
+		 + themes.theme(
+                 axis_title_y = themes.element_text(angle = 90, va = 'center', size = 14),
+                 axis_title_x = themes.element_text(va = 'center', size = 14))
+		 + theme(strip_background = element_blank())
+		 + xlab("Predicted asynchrony $p_n$ (ms)")
+#		 + ylab("$p_n - p_{n-1}$ (ms)")
+ 		 + ylab("$x_n - T_{post}$ (ms)")
+		 # + ggtitle("(b)")
+		 )
+#print(plot_embed_p_diff_facet)
+td_emb_asyn_pred_1 = pw.load_ggplot(plot_embed_p_diff_facet)
+#plot_embed_p_diff_facet.save("time-delayed_therocial_embedding_asyn_pred_difference_pure.pdf")
+
+
+#%% Embedding theorical data (Combined join fitting)
+
+model_PSSCcomb_0_20_50_df = model_PSSCcomb_0_20_50_df.astype({
+    'n': int,
+    'baseline': int,
+    'x': float,
+    's': float,
+    'asyn': float,
+    'p': float
+})
+
+baseline_post = (
+    model_PSSCcomb_0_20_50_df
+    .loc[model_PSSCcomb_0_20_50_df['n'] >= 7]
+    .groupby(['perturb_type', 'perturb_sign', 'perturb_size'])['asyn']
+    .mean()
+    .rename('baseline_post')
+    .reset_index()
+)
+
+# Agregar baseline_post al dataframe original
+model_PSSCcomb_0_20_50_emb_df = (
+    model_PSSCcomb_0_20_50_df
+    .merge(
+        baseline_post,
+        on=['perturb_type', 'perturb_sign', 'perturb_size'],
+        how='left'
+    )
+)
+
+embed_start = 1
+embed_end = 8
+
+model_PSSCcomb_0_20_50_emb_df['asyn_pred_post'] = model_PSSCcomb_0_20_50_emb_df['p'] - model_PSSCcomb_0_20_50_emb_df['baseline_post']
+model_PSSCcomb_0_20_50_emb_df['asyn_pred_post_diff'] = (model_PSSCcomb_0_20_50_emb_df.groupby(['perturb_type', 'perturb_sign', 'perturb_size'])['asyn_pred_post'].diff())
+model_PSSCcomb_0_20_50_emb_df['x-Tpost'] = model_PSSCcomb_0_20_50_emb_df['x'] - model_PSSCcomb_0_20_50_emb_df['s']
+
+model_PSSCcomb_0_20_50_emb_df = (
+    model_PSSCcomb_0_20_50_emb_df[
+        ((model_PSSCcomb_0_20_50_emb_df['perturb_type'] == 'SC') & 
+         (model_PSSCcomb_0_20_50_emb_df['n'] >= embed_start)) |
+        ((model_PSSCcomb_0_20_50_emb_df['perturb_type'] == 'PS') & 
+         (model_PSSCcomb_0_20_50_emb_df['n'] > embed_start))
+    ].reset_index(drop=True)
+)
+model_PSSCcomb_0_20_50_emb_df['perturb_size'] = model_PSSCcomb_0_20_50_emb_df['perturb_size'].astype('str') 
+#model_PSSCcomb_0_20_50_emb_df.to_csv('model_PSSCcomb_0_20_50_emb_df.csv')
+
+x_lims = [-60,60]
+y_lims = [-60,60]
+fig_xsize = 10 * 0.393701   # centimeter to inch
+fig_ysize = 10 * 0.393701   # centimeter to inch
+
+plot_embed_p_diff_facet = (
+#	ggplot(model_PSSCcomb_0_20_50_emb_df, aes(x = 'asyn_pred_post', y = 'asyn_pred_post_diff',
+   	ggplot(model_PSSCcomb_0_20_50_emb_df, aes(x = 'p', y = 'x-Tpost',
+                                                group = 'perturb_type_x_perturb_sign_x_perturb_size',
+                                                color = 'perturb_type',
+                                                linetype = 'perturb_sign',
+                                                shape = 'perturb_size'))
+ 		 + geom_path()
+		 + geom_point(size = marker_size)
+		 + scale_color_manual(values = color_map_hex)
+		 + scale_linetype_manual(values = line_map)
+		 + scale_shape_manual(values = shape_map)
+		 + scale_x_continuous(breaks=range(x_lims[0],x_lims[1],20))
+		 + scale_y_continuous(breaks=range(y_lims[0],y_lims[1],20))
+		 + theme_bw(base_size=16)
+ 		 + theme(legend_title = element_text(size=12),
+	                     legend_text=element_text(size=12),
+	                     legend_key=element_rect(fill = "white", color = 'white'), 
+	                     figure_size = (fig_xsize, fig_ysize))
+		 + themes.theme(
+                 axis_title_y = themes.element_text(angle = 90, va = 'center', size = 14),
+                 axis_title_x = themes.element_text(va = 'center', size = 14))
+		 + theme(strip_background = element_blank())
+		 + xlab("Predicted asynchrony $p_n$ (ms)")
+#		 + ylab("$p_n - p_{n-1}$ (ms)")
+		 + ylab("$x_n - T_{post}$ (ms)")
+		 # + ggtitle("(b)")
+		 )
+#print(plot_embed_p_diff_facet)
+td_emb_asyn_pred_2 = pw.load_ggplot(plot_embed_p_diff_facet)
+#plot_embed_p_diff_facet.save("time-delayed_therocial_embedding_asyn_pred_difference_combined_join_fitting.pdf")
+
+
+#%% Theorical data timeseries: asyn (Pure separete fitting). Just n=0 and n=1
+
+x_lims = [-1,2]
+y_lims = [-80, 80]
+fig_xsize = 0.15*15 * 0.393701   # centimeter to inch
+fig_ysize = 10 * 0.393701   # centimeter to inch
+
+plot_model_timeseries = (
+	ggplot(model_SCpure_PSpure_0_20_50_df.query('(n==0 | n==1)'), aes(x = 'n', y = 'p',
+								 group = 'perturb_type_x_perturb_sign_x_perturb_size',
+								 color = 'perturb_type',
+								 linetype = 'perturb_sign',
+								 shape = 'perturb_size'))
+	+ geom_line()
+	+ geom_point(size = marker_size)
+	+ scale_color_manual(values = color_map_hex, guide=False)
+	+ scale_linetype_manual(values = line_map, guide=False)
+	+ scale_shape_manual(values = shape_map, guide=False)
+	+ scale_x_continuous(breaks=range(x_lims[0]+1,x_lims[1],1))
+	+ scale_y_continuous(breaks=range(y_lims[0],y_lims[1],20))
+	+ theme_bw(base_size=16)
+	+ theme(legend_title = element_text(size=16),
+                     legend_text=element_text(size=16),
+                     legend_key=element_rect(fill = "white", color = 'white'), 
+                     figure_size = (fig_xsize, fig_ysize))
+	+ themes.theme(
+                axis_title_y = themes.element_text(angle = 90, va = 'center', size = 14),
+                axis_title_x = themes.element_text(va = 'center', size = 14))
+	+ theme(strip_background = element_blank())
+	+ xlab("n")
+	+ ylab("Predicted asynchrony $p_n$ (ms)")
+	# + ggtitle("(a)")
+	)
+#print(plot_model_timeseries)
+plot_model_timeseries_1b = pw.load_ggplot(plot_model_timeseries)
+#plot_model_timeseries.save("Fitting_data_pure_2.pdf")
+
+
+#%% Theorical data timeseries: asyn (Combined join fitting). Just n=0 and n=1
+
+x_lims = [-1,2]
+y_lims = [-80, 80]
+fig_xsize = 0.15*15 * 0.393701   # centimeter to inch
+fig_ysize = 10 * 0.393701   # centimeter to inch
+
+plot_model_timeseries = (
+	ggplot(model_PSSCcomb_0_20_50_df.query('(n==0 | n==1)'), aes(x = 'n', y = 'p',
+								 group = 'perturb_type_x_perturb_sign_x_perturb_size',
+								 color = 'perturb_type',
+								 linetype = 'perturb_sign',
+								 shape = 'perturb_size'))
+	+ geom_line()
+	+ geom_point(size = marker_size)
+	+ scale_color_manual(values = color_map_hex, guide=False)
+	+ scale_linetype_manual(values = line_map, guide=False)
+	+ scale_shape_manual(values = shape_map, guide=False)
+	+ scale_x_continuous(breaks=range(x_lims[0]+1,x_lims[1],1))
+	+ scale_y_continuous(breaks=range(y_lims[0],y_lims[1],20))
+	+ theme_bw(base_size=16)
+	+ theme(legend_title = element_text(size=16),
+                     legend_text=element_text(size=16),
+                     legend_key=element_rect(fill = "white", color = 'white'), 
+                     figure_size = (fig_xsize, fig_ysize))
+	+ themes.theme(
+                axis_title_y = themes.element_text(angle = 90, va = 'center', size = 14),
+                axis_title_x = themes.element_text(va = 'center', size = 14))
+	+ theme(strip_background = element_blank())
+	+ xlab("n")
+	+ ylab("Predicted asynchrony $p_n$ (ms)")
+	# + ggtitle("(a)")
+	)
+#print(plot_model_timeseries)
+plot_model_timeseries_2b = pw.load_ggplot(plot_model_timeseries)
+#plot_model_timeseries.save("Fitting_data_combined_join_fitting_2.pdf")
+
+
+
+#%% Arrange figure
+
+plot_pred = (plot_model_timeseries_1|plot_model_timeseries_1b|td_emb_asyn_pred_1)/(plot_model_timeseries_2|plot_model_timeseries_2b|td_emb_asyn_pred_2)
+plot_pred.savefig("FigS1_model_simul.pdf")
+plot_pred.savefig("FigS1_model_simul.png")
 
 
 
 
-
-
-
-#%% Embedding data
+#%% Embedding experimental data
 embed_start = 1
 embed_end = 8
 
@@ -1396,6 +1725,11 @@ data3_fit_PSSCpurecomb_df['asyn_post_diff'] = data3_fit_PSSCpurecomb_df['asyn_po
 data3_fit_PSSCpurecomb_df['asyn_pred_post_diff'] = data3_fit_PSSCpurecomb_df['asyn_pred_post'] - data3_fit_PSSCpurecomb_df['asyn_pred_post_prev']
 #data3_fit_PSSCpurecomb_df.to_csv('data3_fit_PSSCpurecomb_df.csv')
 
+# save all asyn_pred_values
+data3_fit_PSSCpurecomb_alln_df = data3_fit_PSSCpurecomb_df.copy(deep=True)
+data3_fit_PSSCpurecomb_alln_df['perturb_size'] = data3_fit_PSSCpurecomb_alln_df['perturb_size'].astype('str') 
+
+
 # select transient phase only (PS starts one beep later than SC)
 data3_fit_PSSCpurecomb_df = data3_fit_PSSCpurecomb_df[(((data3_fit_PSSCpurecomb_df['perturb_type']=='SC') & (data3_fit_PSSCpurecomb_df['n']>=embed_start))
 													   | ((data3_fit_PSSCpurecomb_df['perturb_type']=='PS') & (data3_fit_PSSCpurecomb_df['n']>=embed_start+1)))
@@ -1403,7 +1737,156 @@ data3_fit_PSSCpurecomb_df = data3_fit_PSSCpurecomb_df[(((data3_fit_PSSCpurecomb_
 #data3_fit_PSSCpurecomb_df.to_csv('data3_fit_PSSCpurecomb_df.csv')
 
 
-#%% Plot embedding, ASYN_PRED difference, perturb_size 20 and 50 together
+#%% Experimental data timeseries: asyn
+
+x_lims = [-4,11]
+y_lims = [-80, 80]
+fig_xsize = 15 * 0.393701   # centimeter to inch
+fig_ysize = 10 * 0.393701   # centimeter to inch
+
+exp_PSSCpure_df = data3_fit_PSSCpure_df[['origin_data','origin','context','perturb_type','perturb_sign','perturb_size','n','asyn']]
+exp_PSSCpure_df = exp_PSSCpure_df[(exp_PSSCpure_df['n'] >= -3) & (exp_PSSCpure_df['n'] < 11)]
+exp_PSSCpure_df['perturb_size'] = exp_PSSCpure_df['perturb_size'].astype('str') 
+#exp_PSSCpure_df.to_csv('exp_PSSCpure_df.csv')
+plot_model_timeseries = (
+	ggplot(exp_PSSCpure_df, aes(x = 'n', y = 'asyn',
+								 group = 'origin',
+								 color = 'perturb_type',
+								 linetype = 'perturb_sign',
+								 shape = 'perturb_size'))
+	+ geom_line()
+	+ geom_point(size = marker_size)
+	+ scale_color_manual(values = color_map_hex, guide=False)
+	+ scale_linetype_manual(values = line_map, guide=False)
+	+ scale_shape_manual(values = shape_map, guide=False)
+	+ scale_x_continuous(breaks=range(x_lims[0]+1,x_lims[1],1))
+	# + scale_y_continuous(breaks=range(y_lims[0],y_lims[1],10))
+	+ scale_y_continuous(breaks=range(y_lims[0],y_lims[1],20))
+	+ theme_bw(base_size=14)
+	+ theme(legend_title = element_text(size=16),
+                     legend_text=element_text(size=16),
+                     legend_key=element_rect(fill = "white", color = 'white'), 
+                     figure_size = (fig_xsize, fig_ysize))
+	+ themes.theme(
+                axis_title_y = themes.element_text(angle = 90, va = 'center', size = 14),
+                axis_title_x = themes.element_text(va = 'center', size = 14))
+	+ theme(strip_background = element_blank())
+ 		 	# title = element_text(size = 18))
+	+ xlab("n")
+	+ ylab("Asynchrony $e_n$ (ms)")
+	+ ggtitle("(a) Pure context (experiment)")
+	)
+#print(plot_model_timeseries)
+plot_model_timeseries_pure_pw = pw.load_ggplot(plot_model_timeseries)
+#plot_model_timeseries.save('Exp_data_pure.pdf')
+
+exp_PSSCcomb_df = data3_fit_PSSCcomb_df[['origin_data','origin','context','perturb_type','perturb_sign','perturb_size','n','asyn']]
+exp_PSSCcomb_df = exp_PSSCcomb_df[(exp_PSSCcomb_df['n'] >= -3) & (exp_PSSCpure_df['n'] < 11)]
+exp_PSSCcomb_df['perturb_size'] = exp_PSSCcomb_df['perturb_size'].astype('str') 
+#exp_PSSCcomb_df.to_csv('exp_PSSCcomb_df.csv')
+plot_model_timeseries = (
+	ggplot(exp_PSSCcomb_df, aes(x = 'n', y = 'asyn',
+								 group = 'origin',
+								 color = 'perturb_type',
+								 linetype = 'perturb_sign',
+								 shape = 'perturb_size'))
+	+ geom_line()
+	+ geom_point(size = marker_size)
+	+ scale_color_manual(values = color_map_hex, guide=False)
+	+ scale_linetype_manual(values = line_map, guide=False)
+	+ scale_shape_manual(values = shape_map, guide=False)
+	+ scale_x_continuous(breaks=range(x_lims[0]+1,x_lims[1],1))
+	# + scale_y_continuous(breaks=range(y_lims[0],y_lims[1],10))
+	+ scale_y_continuous(breaks=range(y_lims[0],y_lims[1],20))
+	+ theme_bw(base_size=14)
+	+ theme(legend_title = element_text(size=16),
+                     legend_text=element_text(size=16),
+                     legend_key=element_rect(fill = "white", color = 'white'), 
+                     figure_size = (fig_xsize, fig_ysize))
+	+ themes.theme(
+                axis_title_y = themes.element_text(angle = 90, va = 'center', size = 14),
+                axis_title_x = themes.element_text(va = 'center', size = 14))
+	+ theme(strip_background = element_blank())
+		 	# title = element_text(size = 18))
+	+ xlab("n")
+	+ ylab("Asynchrony $e_n$ (ms)")
+	+ ggtitle("(b) Combined context (experiment)")
+	)
+#print(plot_model_timeseries)
+plot_model_timeseries_comb_pw = pw.load_ggplot(plot_model_timeseries)
+#plot_model_timeseries.save('Exp_data_comb.pdf')
+
+
+
+#%% Experimental data timeseries: predicted asyn
+
+x_lims = [-1,2]
+y_lims = [-80, 80]
+fig_xsize = 0.15*15 * 0.393701   # centimeter to inch
+fig_ysize = 10 * 0.393701   # centimeter to inch
+
+plot_model_timeseries_pred_pure = (
+	ggplot(data3_fit_PSSCpurecomb_alln_df.query('context=="pure" & (n==0 | n==1)'), aes(x = 'n', y = 'asyn_pred',
+								 group = 'origin',
+								 color = 'perturb_type',
+								 linetype = 'perturb_sign',
+								 shape = 'perturb_size'))
+	+ geom_line()
+	+ geom_point(size = marker_size)
+	+ scale_color_manual(values = color_map_hex, guide=False)
+	+ scale_linetype_manual(values = line_map, guide=False)
+	+ scale_shape_manual(values = shape_map, guide=False)
+	+ scale_x_continuous(breaks=range(x_lims[0]+1,x_lims[1],1))
+	+ scale_y_continuous(breaks=range(y_lims[0],y_lims[1],20))
+	+ theme_bw(base_size=16)
+	+ theme(legend_title = element_text(size=16),
+                     legend_text=element_text(size=16),
+                     legend_key=element_rect(fill = "white", color = 'white'), 
+                     figure_size = (fig_xsize, fig_ysize))
+	+ themes.theme(
+                axis_title_y = themes.element_text(angle = 90, va = 'center', size = 14),
+                axis_title_x = themes.element_text(va = 'center', size = 14))
+	+ theme(strip_background = element_blank())
+	+ xlab("n")
+	+ ylab("Predicted asynchrony $p_n$ (ms)")
+	# + ggtitle("(a)")
+	)
+plot_model_timeseries_pred_pure_pw = pw.load_ggplot(plot_model_timeseries_pred_pure)
+
+
+plot_model_timeseries_pred_comb = (
+	ggplot(data3_fit_PSSCpurecomb_alln_df.query('context=="comb" & (n==0 | n==1)'), aes(x = 'n', y = 'asyn_pred',
+								 group = 'origin',
+								 color = 'perturb_type',
+								 linetype = 'perturb_sign',
+								 shape = 'perturb_size'))
+	+ geom_line()
+	+ geom_point(size = marker_size)
+	+ scale_color_manual(values = color_map_hex, guide=False)
+	+ scale_linetype_manual(values = line_map, guide=False)
+	+ scale_shape_manual(values = shape_map, guide=False)
+	+ scale_x_continuous(breaks=range(x_lims[0]+1,x_lims[1],1))
+	+ scale_y_continuous(breaks=range(y_lims[0],y_lims[1],20))
+	+ theme_bw(base_size=16)
+	+ theme(legend_title = element_text(size=16),
+                     legend_text=element_text(size=16),
+                     legend_key=element_rect(fill = "white", color = 'white'), 
+                     figure_size = (fig_xsize, fig_ysize))
+	+ themes.theme(
+                axis_title_y = themes.element_text(angle = 90, va = 'center', size = 14),
+                axis_title_x = themes.element_text(va = 'center', size = 14))
+	+ theme(strip_background = element_blank())
+	+ xlab("n")
+	+ ylab("Predicted asynchrony $p_n$ (ms)")
+	# + ggtitle("(c)")
+	)
+#print(plot_model_timeseries)
+plot_model_timeseries_pred_comb_pw = pw.load_ggplot(plot_model_timeseries_pred_comb)
+#plot_model_timeseries.save('Exp_data_comb.pdf')
+
+
+#%% Plot experimental embedding, ASYN_PRED difference, perturb_size 20 and 50 together
+
 x_lims = [-60,60]
 y_lims = [-60,60]
 fig_xsize = 10 * 0.393701   # centimeter to inch
@@ -1427,22 +1910,26 @@ plot_embed_p_diff_facet = (
 		 + scale_shape_manual(values = shape_map)
 		 + scale_x_continuous(breaks=range(x_lims[0],x_lims[1],20))
 		 + scale_y_continuous(breaks=range(y_lims[0],y_lims[1],20))
-		 + theme_bw(base_size=14)	 	 
- 		 + theme(legend_title = element_text(size=9),
-	                     legend_text=element_text(size=9),
+		 + theme_bw(base_size=16)
+ 		 + theme(legend_title = element_text(size=12),
+	                     legend_text=element_text(size=12),
 	                     legend_key=element_rect(fill = "white", color = 'white'), 
 	                     figure_size = (fig_xsize, fig_ysize))
 		 + themes.theme(
-                 axis_title_y = themes.element_text(angle = 90, va = 'center', size = 12),
-                 axis_title_x = themes.element_text(va = 'center', size = 12))
+                 axis_title_y = themes.element_text(angle = 90, va = 'center', size = 14),
+                 axis_title_x = themes.element_text(va = 'center', size = 14))
 		 + theme(strip_background = element_blank())
 		 + xlab("Predicted asynchrony $p_n$ (ms)")
 		 + ylab("$p_n - p_{n-1}$ (ms)")
-		 + ggtitle("(b)")
+		 # + ggtitle("(b)")
 		 )
 #print(plot_embed_p_diff_facet)
 td_emb_asyn_pred_diff_pure = pw.load_ggplot(plot_embed_p_diff_facet)
 #plot_embed_p_diff_facet.save("time-delayed_embedding_asyn_pred_difference_pure.pdf")
+
+# td_emb_asyn_pred_diff_pure.savefig("Fig_Embeddings_x.png")
+
+
 
 data3_fit_comb_20_df = data3_fit_PSSCpurecomb_df[(data3_fit_PSSCpurecomb_df['context'] == 'comb') & (data3_fit_PSSCpurecomb_df['perturb_size'] == 20)]
 data3_fit_comb_50_df = data3_fit_PSSCpurecomb_df[(data3_fit_PSSCpurecomb_df['context'] == 'comb') & (data3_fit_PSSCpurecomb_df['perturb_size'] == 50)]
@@ -1462,117 +1949,35 @@ plot_embed_p_diff_facet = (
 		 + scale_shape_manual(values = shape_map)
 		 + scale_x_continuous(breaks=range(x_lims[0],x_lims[1],20))
 		 + scale_y_continuous(breaks=range(y_lims[0],y_lims[1],20))
-		 + theme_bw(base_size=14)		 	 
- 		 + theme(legend_title = element_text(size=9),
-	                     legend_text=element_text(size=9),
+		 + theme_bw(base_size=16)
+ 		 + theme(legend_title = element_text(size=12),
+	                     legend_text=element_text(size=12),
 	                     legend_key=element_rect(fill = "white", color = 'white'), 
 	                     figure_size = (fig_xsize, fig_ysize))
 		 + themes.theme(
-                 axis_title_y = themes.element_text(angle = 90, va = 'center', size = 12),
-                 axis_title_x = themes.element_text(va = 'center', size = 12))
+                 axis_title_y = themes.element_text(angle = 90, va = 'center', size = 14),
+                 axis_title_x = themes.element_text(va = 'center', size = 14))
 		 + theme(strip_background = element_blank())
 		 + xlab("Predicted asynchrony $p_n$ (ms)")
 		 + ylab("$p_n - p_{n-1}$ (ms)")
-		 + ggtitle("(d)")
+		 # + ggtitle("(d)")
 		 )
 #print(plot_embed_p_diff_facet)
 td_emb_asyn_pred_diff_comb = pw.load_ggplot(plot_embed_p_diff_facet)
 #plot_embed_p_diff_facet.save("time-delayed_embedding_asyn_pred_difference_comb.pdf")
 
 
-#%% Experimental data timeseries for embeddings
-x_lims = [-4,11]
-y_lims = [-60, 60]
-fig_xsize = 15 * 0.393701   # centimeter to inch
-fig_ysize = 10 * 0.393701   # centimeter to inch
 
-exp_PSSCpure_df = data3_fit_PSSCpure_df[['origin_data','origin','context','perturb_type','perturb_sign','perturb_size','n','asyn']]
-exp_PSSCpure_df = exp_PSSCpure_df[(exp_PSSCpure_df['n'] >= -3) & (exp_PSSCpure_df['n'] < 11)]
-exp_PSSCpure_df['perturb_size'] = exp_PSSCpure_df['perturb_size'].astype('str') 
-#exp_PSSCpure_df.to_csv('exp_PSSCpure_df.csv')
-plot_model_timeseries = (
-	ggplot(exp_PSSCpure_df, aes(x = 'n', y = 'asyn',
-								 group = 'origin',
-								 color = 'perturb_type',
-								 linetype = 'perturb_sign',
-								 shape = 'perturb_size'))
-	+ geom_line()
-	+ geom_point(size = marker_size)
-	+ scale_color_manual(values = color_map_hex, guide=False)
-	+ scale_linetype_manual(values = line_map, guide=False)
-	+ scale_shape_manual(values = shape_map, guide=False)
-	+ scale_x_continuous(breaks=range(x_lims[0]+1,x_lims[1],1))
-	+ scale_y_continuous(breaks=range(y_lims[0],y_lims[1],10))
-	+ theme_bw(base_size=16)
-	+ theme(legend_title = element_text(size=16),
-                     legend_text=element_text(size=16),
-                     legend_key=element_rect(fill = "white", color = 'white'), 
-                     figure_size = (fig_xsize, fig_ysize))
-	+ themes.theme(
-                axis_title_y = themes.element_text(angle = 90, va = 'center', size = 14),
-                axis_title_x = themes.element_text(va = 'center', size = 14))
-	+ theme(strip_background = element_blank())
-	+ xlab("n")
-	+ ylab("Asynchrony $e_n$ (ms)")
-	+ ggtitle("(a)")
-	)
-#print(plot_model_timeseries)
-plot_model_timeseries_pure = pw.load_ggplot(plot_model_timeseries)
-#plot_model_timeseries.save('Exp_data_pure.pdf')
+#%% Arrange figure
 
-exp_PSSCcomb_df = data3_fit_PSSCcomb_df[['origin_data','origin','context','perturb_type','perturb_sign','perturb_size','n','asyn']]
-exp_PSSCcomb_df = exp_PSSCcomb_df[(exp_PSSCcomb_df['n'] >= -3) & (exp_PSSCpure_df['n'] < 11)]
-exp_PSSCcomb_df['perturb_size'] = exp_PSSCcomb_df['perturb_size'].astype('str') 
-#exp_PSSCcomb_df.to_csv('exp_PSSCcomb_df.csv')
-plot_model_timeseries = (
-	ggplot(exp_PSSCcomb_df, aes(x = 'n', y = 'asyn',
-								 group = 'origin',
-								 color = 'perturb_type',
-								 linetype = 'perturb_sign',
-								 shape = 'perturb_size'))
-	+ geom_line()
-	+ geom_point(size = marker_size)
-	+ scale_color_manual(values = color_map_hex, guide=False)
-	+ scale_linetype_manual(values = line_map, guide=False)
-	+ scale_shape_manual(values = shape_map, guide=False)
-	+ scale_x_continuous(breaks=range(x_lims[0]+1,x_lims[1],1))
-	+ scale_y_continuous(breaks=range(y_lims[0],y_lims[1],10))
-	+ theme_bw(base_size=16)
-	+ theme(legend_title = element_text(size=16),
-                     legend_text=element_text(size=16),
-                     legend_key=element_rect(fill = "white", color = 'white'), 
-                     figure_size = (fig_xsize, fig_ysize))
-	+ themes.theme(
-                axis_title_y = themes.element_text(angle = 90, va = 'center', size = 14),
-                axis_title_x = themes.element_text(va = 'center', size = 14))
-	+ theme(strip_background = element_blank())
-	+ xlab("n")
-	+ ylab("Asynchrony $e_n$ (ms)")
-	+ ggtitle("(c)")
-	)
-#print(plot_model_timeseries)
-plot_model_timeseries_comb = pw.load_ggplot(plot_model_timeseries)
-#plot_model_timeseries.save('Exp_data_comb.pdf')
-
-
-#%%
-plot_model = (plot_model_timeseries_pure|td_emb_asyn_pred_diff_pure)/(plot_model_timeseries_comb|td_emb_asyn_pred_diff_comb)
-plot_model.savefig("Fig_Embeddings.pdf")
-plot_model.savefig("Fig_Embeddings.png")
-
-
-#%%
+plot_pred = (plot_model_timeseries_pure_pw|plot_model_timeseries_pred_pure_pw|td_emb_asyn_pred_diff_pure)/(plot_model_timeseries_comb_pw|plot_model_timeseries_pred_comb_pw|td_emb_asyn_pred_diff_comb)
+plot_pred.savefig("Fig1_Embeddings.pdf")
+plot_pred.savefig("Fig1_Embeddings.png")
 
 
 
+#%% Correlation between parameters PSSCcomb
 
-
-
-
-
-
-
-#%% Correlation between parameters
 params2_PSSCcomb_df = params_PSSCcomb_df.drop(columns=['alpha1', 'beta1', 'gamma1', 'delta1', 'eps1', 'eta1', 'beta2',
 													   'gamma2', 'delta2', 'eps2', 'dseta2', 'eta2', 'dist']).reset_index(drop=True)
 #params2_PSSCcomb_df.to_csv('params2_PSSCcomb_df.csv')
@@ -1620,9 +2025,11 @@ with plt.rc_context({
 			ax.xaxis.get_offset_text().set_fontsize(4.5)
 			ax.yaxis.get_offset_text().set_fontsize(4.5)
 		
-	correlation_parameters.savefig("Fig_Corr_params_PSSCcomb.pdf", bbox_inches="tight")
-	correlation_parameters.savefig("Fig_Corr_params_PSSCcomb.png", dpi=300, bbox_inches="tight")
+	correlation_parameters.savefig("FigS3_Corr_params_PSSCcomb.pdf", bbox_inches="tight")
+	correlation_parameters.savefig("FigS3_Corr_params_PSSCcomb.png", dpi=300, bbox_inches="tight")
 
+
+#%% Correlation between parameters PSSCpure
 
 params2_PSSCpure_df = params_PSSCpure_df.drop(columns=['alpha1', 'beta1', 'gamma1', 'delta1', 'eps1', 'eta1', 'beta2',
 													   'gamma2', 'delta2', 'eps2', 'dseta2', 'eta2', 'dist']).reset_index(drop=True)
@@ -1670,18 +2077,8 @@ with plt.rc_context({
 			ax.xaxis.get_offset_text().set_fontsize(4.5)
 			ax.yaxis.get_offset_text().set_fontsize(4.5)
 	
-	correlation_parameters.savefig("Fig_Corr_params_PSSCpure.pdf", bbox_inches="tight")
-	correlation_parameters.savefig("Fig_Corr_params_PSSCpure.png", dpi=300, bbox_inches="tight")
-
-
-#%%
-
-
-
-
-
-
-
+	correlation_parameters.savefig("FigS2_Corr_params_PSSCpure.pdf", bbox_inches="tight")
+	correlation_parameters.savefig("FigS2_Corr_params_PSSCpure.png", dpi=300, bbox_inches="tight")
 
 
 
@@ -1795,8 +2192,8 @@ for i, ax in enumerate(axs.flat):
         spine.set_linewidth(0.5)
 
 plt.tight_layout()
-plt.savefig("Fig_Distribution2.pdf")
-plt.savefig("Fig_Distribution2.png", dpi=300)
+plt.savefig("Fig4_Distribution2.pdf")
+plt.savefig("Fig4_Distribution2.png", dpi=300)
 plt.show()
 
 
@@ -1907,12 +2304,14 @@ for i, ax in enumerate(axs.flat):
         spine.set_linewidth(0.5)
 
 plt.tight_layout()
-plt.savefig("Fig_Distribution3.pdf")
-plt.savefig("Fig_Distribution3.png", dpi=300)
+plt.savefig("Fig5_Distribution3.pdf")
+plt.savefig("Fig5_Distribution3.png", dpi=300)
 plt.show()
 
 
+
 #%% Histograms of the parameters a and dseta1, SCpure vs PSpure.
+
 params_pure_SC1_df = params_pure_df[(params_pure_df['perturb_type_x_subpopulation'] == 'SC1')]
 #params_pure_SC1_df.to_csv('params_pure_SC1_df.csv')
 dseta1_lst = params_pure_SC1_df['dseta1'].tolist()
@@ -1975,9 +2374,10 @@ for ax in axs:
         spine.set_linewidth(0.5)
 
 plt.tight_layout()
-plt.savefig("Fig_Distribution.pdf")
-plt.savefig("Fig_Distribution.png", dpi=300)
+plt.savefig("Fig3_Distribution.pdf")
+plt.savefig("Fig3_Distribution.png", dpi=300)
 plt.show()
+
 
 
 #%%
